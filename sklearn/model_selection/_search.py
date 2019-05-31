@@ -579,7 +579,7 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
         """
         raise NotImplementedError("_run_search not implemented.")
 
-    def fit(self, X, y=None, groups=None, **fit_params):
+    def fit(self, X, y=None, groups=None, return_estimators=False, **fit_params):
         """Run fit with all sets of parameters.
 
         Parameters
@@ -596,6 +596,10 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
         groups : array-like, with shape (n_samples,), optional
             Group labels for the samples used while splitting the dataset into
             train/test set.
+
+        return_estimators: bool, optional
+            If True, will save all tested estimators in cv_results_. Also you
+            probably you haven't need to ``refit`` best_estimator_
 
         **fit_params : dict of string -> object
             Parameters passed to the ``fit`` method of the estimator
@@ -639,6 +643,7 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
                                     return_n_test_samples=True,
                                     return_times=True,
                                     return_parameters=False,
+                                    return_estimator=return_estimators,
                                     error_score=self.error_score,
                                     verbose=self.verbose)
         results = {}

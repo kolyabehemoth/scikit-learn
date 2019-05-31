@@ -1692,7 +1692,7 @@ def test__custom_fit_no_run_search():
         def __init__(self, estimator, **kwargs):
             super().__init__(estimator, **kwargs)
 
-        def fit(self, X, y=None, groups=None, **fit_params):
+        def fit(self, X, y=None, groups=None, return_estimators=False, **fit_params):
             return self
 
     # this should not raise any exceptions
