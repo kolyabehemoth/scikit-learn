@@ -733,11 +733,19 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
 
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
-            (train_score_dicts, test_score_dicts, test_sample_counts, fit_time,
-             score_time) = zip(*out)
+            if self.return_estimators:
+                (train_score_dicts, test_score_dicts, test_sample_counts, fit_time,
+                 score_time, estimators) = zip(*out)
+            else:
+                (train_score_dicts, test_score_dicts, test_sample_counts, fit_time,
+                 score_time) = zip(*out)
         else:
-            (test_score_dicts, test_sample_counts, fit_time,
-             score_time) = zip(*out)
+            if self.return_estimators:
+                (test_score_dicts, test_sample_counts, fit_time,
+                 score_time, estimators) = zip(*out)
+            else:
+                (test_score_dicts, test_sample_counts, fit_time,
+                 score_time) = zip(*out)
 
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
@@ -790,6 +798,8 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
         results.update(param_results)
         # Store a list of param dicts at the key 'params'
         results['params'] = candidate_params
+        if self.return_estimators:
+            results['estimators'] = estimators
 
         # NOTE test_sample counts (weights) remain the same for all candidates
         test_sample_counts = np.array(test_sample_counts[:n_splits],
