@@ -382,7 +382,8 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, estimator, scoring=None, n_jobs=None, iid='warn',
                  refit=True, cv='warn', verbose=0, pre_dispatch='2*n_jobs',
-                 error_score='raise-deprecating', return_train_score=True):
+                 error_score='raise-deprecating', return_train_score=True,
+                 return_estimators=False):
 
         self.scoring = scoring
         self.estimator = estimator
@@ -394,6 +395,7 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
         self.pre_dispatch = pre_dispatch
         self.error_score = error_score
         self.return_train_score = return_train_score
+        self.return_estimators = return_estimators
 
     @property
     def _estimator_type(self):
@@ -640,6 +642,7 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
                                     return_n_test_samples=True,
                                     return_times=True,
                                     return_parameters=False,
+                                    return_estimator=self.return_estimators,
                                     error_score=self.error_score,
                                     verbose=self.verbose)
         results = {}
@@ -1134,12 +1137,13 @@ class GridSearchCV(BaseSearchCV):
     def __init__(self, estimator, param_grid, scoring=None,
                  n_jobs=None, iid='warn', refit=True, cv='warn', verbose=0,
                  pre_dispatch='2*n_jobs', error_score='raise-deprecating',
-                 return_train_score=False):
+                 return_train_score=False, return_estimators=False):
         super().__init__(
             estimator=estimator, scoring=scoring,
             n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
             pre_dispatch=pre_dispatch, error_score=error_score,
-            return_train_score=return_train_score)
+            return_train_score=return_train_score,
+            return_estimators=return_estimators)
         self.param_grid = param_grid
         _check_param_grid(param_grid)
 
@@ -1451,7 +1455,7 @@ class RandomizedSearchCV(BaseSearchCV):
                  n_jobs=None, iid='warn', refit=True,
                  cv='warn', verbose=0, pre_dispatch='2*n_jobs',
                  random_state=None, error_score='raise-deprecating',
-                 return_train_score=False):
+                 return_train_score=False, return_estimators=False):
         self.param_distributions = param_distributions
         self.n_iter = n_iter
         self.random_state = random_state
@@ -1459,7 +1463,8 @@ class RandomizedSearchCV(BaseSearchCV):
             estimator=estimator, scoring=scoring,
             n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
             pre_dispatch=pre_dispatch, error_score=error_score,
-            return_train_score=return_train_score)
+            return_train_score=return_train_score,
+            return_estimators=return_estimators)
 
     def _run_search(self, evaluate_candidates):
         """Search n_iter candidates from param_distributions"""
