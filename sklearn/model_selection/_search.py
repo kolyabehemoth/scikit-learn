@@ -799,7 +799,8 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
         # Store a list of param dicts at the key 'params'
         results['params'] = candidate_params
         if self.return_estimators:
-            results['estimators'] = estimators
+            # make the same shape as splits
+            results['estimators'] = np.array(estimators, dtype=np.object).reshape(len(candidate_params), n_splits).transpose()
 
         # NOTE test_sample counts (weights) remain the same for all candidates
         test_sample_counts = np.array(test_sample_counts[:n_splits],
