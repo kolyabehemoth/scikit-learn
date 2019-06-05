@@ -25,10 +25,11 @@ import sys
 import types
 
 import warnings
-warnings.warn("The module is deprecated in version 0.21 and will be removed "
-              "in version 0.23 since we've dropped support for Python 2.7. "
-              "Please rely on the official version of six "
-              "(https://pypi.org/project/six/).", DeprecationWarning)
+# warnings.warn("The module is deprecated in version 0.21 and will be removed "
+#               "in version 0.23 since we've dropped support for Python 2.7. "
+#               "Please rely on the official version of six "
+#               "(https://pypi.org/project/six/).", DeprecationWarning)
+# OK
 
 __author__ = "Benjamin Peterson <benjamin@python.org>"
 __version__ = "1.4.1"
